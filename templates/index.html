@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<title>Smart Spam Detection</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#eef2f7;
+}
+
+.navbar{
+background:#1f2a44;
+color:white;
+padding:20px 50px;
+display:flex;
+justify-content:space-between;
+}
+
+.navbar a{
+color:white;
+text-decoration:none;
+margin-left:20px;
+}
+
+.container{
+width:90%;
+max-width:1200px;
+margin:30px auto;
+}
+
+.card{
+background:white;
+padding:30px;
+border-radius:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+h1{
+text-align:center;
+margin-bottom:20px;
+}
+
+textarea{
+width:100%;
+height:180px;
+padding:15px;
+font-size:18px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+#counter{
+text-align:right;
+margin-top:10px;
+color:gray;
+}
+
+button{
+padding:12px 25px;
+margin-top:15px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+.detect{
+background:#2563eb;
+color:white;
+}
+
+.clear{
+background:#dc2626;
+color:white;
+margin-left:10px;
+}
+
+.result{
+margin-top:20px;
+font-size:28px;
+text-align:center;
+font-weight:bold;
+}
+
+.spam{
+color:red;
+}
+
+.ham{
+color:green;
+}
+
+
+.stat-box h2{
+margin-bottom:10px;
+}
+
+table{
+width:100%;
+margin-top:30px;
+border-collapse:collapse;
+background:white;
+}
+
+th{
+background:#2563eb;
+color:white;
+padding:12px;
+}
+
+td{
+padding:12px;
+border:1px solid #ddd;
+}
+
+footer{
+text-align:center;
+margin:30px;
+color:gray;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+<h2>🛡 Smart Spam Detection</h2>
+
+<div>
+<a href="/">Home</a>
+<a href="/about/">About</a>
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h1>Smart Spam Detection System</h1>
+
+<form method="POST">
+
+{% csrf_token %}
+
+<textarea
+id="message"
+name="message"
+placeholder="Type your message here..."
+oninput="countChars()"></textarea>
+
+<p id="counter">0 Characters</p>
+
+<button class="detect" type="submit">
+Detect Spam
+</button>
+
+<button class="clear" type="reset">
+Clear
+</button>
+
+</form>
+
+{% if prediction %}
+
+<div class="result">
+
+Prediction :
+
+<span class="{% if prediction == 'spam' %}spam{% else %}ham{% endif %}">
+{{ prediction|upper }}
+</span>
+
+<br><br>
+
+Confidence : {{ probability }}%
+
+</div>
+
+{% endif %}
+
+</div>
+
+<h2 style="margin-top:40px;">
+Recent Predictions
+</h2>
+
+<table>
+
+<tr>
+<th>Message</th>
+<th>Result</th>
+
+</tr>
+
+{% for item in history %}
+
+<tr>
+
+<td>{{ item.message }}</td>
+     
+
+
+
+<td>
+
+{% if item.result == 'spam' %}
+
+🔴 SPAM
+
+{% else %}
+
+🟢 HAM
+
+{% endif %}
+
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<footer>
+
+Smart Spam Detection System © 2026
+
+</footer>
+
+</div>
+
+<script>
+
+function countChars(){
+
+let text =
+document.getElementById("message").value;
+
+document.getElementById("counter").innerHTML =
+text.length + " Characters";
+
+}
+
+</script>
+
+</body>
+</html>
